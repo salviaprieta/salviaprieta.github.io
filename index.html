@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">		
+		<title>Jeremias-portfolio</title>
+		<style>
+		body {
+    	margin: 0;
+    	overflow: hidden;
+		}
+		.monitor {
+			position: absolute;
+			z-index: 0.1;
+			background: black;
+			width: 1440px;
+    		height: 1080px;
+			border-radius: 300px !important;			
+			display: flex;
+		}
+		.monitor .video{
+			display: none;
+			margin-left: auto;
+    		margin-right: auto;
+		}
+		
+		.monitor .images{
+			display: none;
+			margin-left: auto;
+    		margin-right: auto;
+		}
+		.monitor .back{
+			display: none;
+			margin-left: auto;
+    		margin-right: auto;
+			opacity: 1;
+			background-color: rgba(0, 0, 0, 0);
+		}
+		
+
+		</style>
+	</head>
+	<body>
+        <script async src="https://unpkg.com/es-module-shims@1.8.0/dist/es-module-shims.js"></script>
+
+        <script type="importmap">
+          {
+            "imports": {
+              "three": "https://unpkg.com/three@0.156.1/build/three.module.js",
+              "three/addons/": "https://unpkg.com/three@0.156.1/examples/jsm/"
+            }
+          }
+        </script>	
+
+		<div id="monitor" class="monitor">
+			<img class="monitor" id="none" src="">
+			<img class="monitor images" src="assets/images/about-me.jpg" id="about-me">
+			<img class="monitor images" src="assets/images/01-furniture/0001.png" id="furniture">
+			<img class="monitor images" src="assets/images/02-vg/01.png" id="virtual-gallerys">
+			<img class="monitor images" src="assets/images/03-teleparto/00.jpg" id="teleparto">
+			<iframe class="monitor video" id="reel" src="https://www.youtube.com/embed/U71qXtgMluQ?si=o0aJ3uarC9TuY7oi" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"></iframe>
+			<iframe class="monitor video" id="connie01" src="https://www.youtube.com/embed/BqV27niTIVo?si=TH2HNsPSZCnoAGx5" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"></iframe>
+			<iframe class="monitor video" id="connie02" src="https://www.youtube.com/embed/lRe7-XM5Huk?si=agM4KSI_QD6PCANJ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"></iframe>
+			<iframe class="monitor video" id="televideo" src="https://www.youtube.com/embed/J0mvSI69Ivk?si=ZqtrTmZH58dhQqtE" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"></iframe>
+			<img class="monitor back" src="assets/images/back.png" id="back">
+		</div>
+
+		<div id="container" style="position:absolute; top:0; left:0;">
+
+		<script type="module" src="js/main.js"></script>
+
+	</body>
+</html>
