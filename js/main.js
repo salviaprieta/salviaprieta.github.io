@@ -4,6 +4,38 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js'
 import { RGBELoader } from 'three/addons/loaders/RGBELoader.js'
 import { CSS3DRenderer, CSS3DObject } from 'three/addons/renderers/CSS3DRenderer.js'
 
+const progressBarContainer = document.querySelector('.progress-container');
+progressBarContainer.style.opacity = 1;
+
+const progressValue = document.querySelector('.progress-value');
+const progressBar = document.querySelector('.progress-bar');
+getComputedStyle(progressBar);
+console.log(progressBar.style);
+
+const manager = new THREE.LoadingManager();
+
+/*manager.onStart = function ( url, itemsLoaded, itemsTotal ) {
+	console.log( 'Started loading file: ' + url + '.\nLoaded ' + itemsLoaded + ' of ' + itemsTotal + ' files.' );
+};*/
+
+manager.onLoad = function ( ) {
+	fadeBar();	
+};
+
+function fadeBar () {
+	if (progressBarContainer.style.opacity > 0){
+	requestAnimationFrame(fadeBar);
+	progressBarContainer.style.opacity -= 0.01;
+	}
+}
+
+manager.onProgress = function ( url, itemsLoaded, itemsTotal ) {
+	progressBar.style= `background: radial-gradient(closest-side, rgb(0, 0, 0) 79%, rgba(0, 0, 0, 0) 0%),
+	linear-gradient(90deg, rgba(90, 186, 199, 0.192) 0%, rgba(191, 69, 202, 0.459) 51%,rgba(90, 186, 199, 0.192) 99.9%, rgb(0, 225, 255) 100%),
+	conic-gradient(hotpink ${(itemsLoaded/itemsTotal)*360}deg, #ffffff7e 0deg)`;
+	progressValue.textContent = `${Math.trunc((itemsLoaded/itemsTotal)*100)}%`;
+};
+
 let camera, scene, renderer, rendererCSS, objectCSS, sceneCSS, furnitureArray, currentDiv;
 
 let none = document.getElementById('none');
@@ -46,7 +78,7 @@ function init() {
 	camera.rotation.set(0,1.57,0)
 	scene = new THREE.Scene();
 
-	new RGBELoader()
+	new RGBELoader(manager)
 		.setPath( 'assets/hdr/' )
 		.load( 'belfast_sunset_puresky_4k.hdr', function ( texture ) {
 
@@ -59,7 +91,7 @@ function init() {
 
 			// model
 
-			const loader = new GLTFLoader().setPath( 'assets/glb/' );
+			const loader = new GLTFLoader(manager).setPath( 'assets/glb/' );
 			loader.load( 'portfolio-base.glb', function ( base ) {
 				base.scene.traverse((child, i) => {
 					if (child.isMesh) {
@@ -131,7 +163,7 @@ function cargarEstrellas() {
 	const estrella = new THREE.Object3D();
 	estrella.name = 'estrella';
 	
-	const loader = new GLTFLoader().setPath( 'assets/glb/' );
+	const loader = new GLTFLoader(manager).setPath( 'assets/glb/' );
 	loader.load( 'portfolio-botones.glb', function ( boton ) {
 	
 	
@@ -185,7 +217,7 @@ const pantalla = new THREE.Object3D();
 pantalla.name = 'pantalla';
 
 
-const loader = new GLTFLoader().setPath( 'assets/glb/' );
+const loader = new GLTFLoader(manager).setPath( 'assets/glb/' );
 loader.load( 'portfolio-pantalla.glb', function ( scr ) {
 
 
