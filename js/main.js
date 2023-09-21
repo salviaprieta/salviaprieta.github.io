@@ -10,7 +10,6 @@ progressBarContainer.style.opacity = 1;
 const progressValue = document.querySelector('.progress-value');
 const progressBar = document.querySelector('.progress-bar');
 getComputedStyle(progressBar);
-console.log(progressBar.style);
 
 const manager = new THREE.LoadingManager();
 
@@ -63,6 +62,24 @@ let back = document.getElementById('back');
 let aboutMe = document.getElementById('about-me');
 
 var divs = [none, furniture, reel, back, connie01, connie02, televideo, vg, teleparto, aboutMe];
+
+/* preload images*/
+
+let images = [...furnitureArray, ...vgArray, ...telepartoArray]
+
+
+function preload_images() {
+	for (var i = 0; i < images.length; i++) {
+	var image = new Image();
+	image.src = images[i];
+	//console.log(image);
+	}
+  }
+
+
+preload_images();
+
+/* init */
 
 init();
 render();
@@ -153,6 +170,8 @@ function init() {
 
 }
 
+/* botones */
+
 function cargarEstrellas() {
 
 	const estrellaMAT = new THREE.MeshStandardMaterial({
@@ -185,6 +204,8 @@ function cargarEstrellas() {
 
 	scene.add(estrella);
 }
+
+/*pantalla*/
 
 const screenName = new THREE.TextureLoader().load( 'assets/screen/screen-name.jpg' );
 screenName.colorSpace = THREE.SRGBColorSpace;
@@ -240,6 +261,8 @@ loader.load( 'portfolio-pantalla.glb', function ( scr ) {
 
 scene.add(pantalla);
 
+/* renderer*/
+
 function onWindowResize() {
 
 	camera.aspect = window.innerWidth / window.innerHeight;
@@ -258,6 +281,8 @@ function render() {
 	rendererCSS.render( sceneCSS, camera );
 	renderer.render( scene, camera );	
 }
+
+/*interaction*/
 
 const pointer = new THREE.Vector2();
 const clicker = new THREE.Vector2();
@@ -316,20 +341,7 @@ const onMouseMove = (event) => {
 			render();
 		  } else {
 		  }
-	} 
-	/*if (intersects.length > 0 && intersects[0].object.name == 'estrella_boton') {
-	currentIntersection = intersects[0].object;	
-	currentIntersection.material.emissive.set(0xff0000);
-	//console.log(currentIntersection);
-	document.body.style.cursor = 'pointer'; 
-	render();	
-	}
-	 else if (currentIntersection !== null ) {
-      currentIntersection.material.emissive.set( 0x000000 );
-      currentIntersection = null;
-	  document.body.style.cursor = 'default';
-	  render();
-    } else {}*/
+	} 	
 }
 
 const onMouseClick = (event) => {
