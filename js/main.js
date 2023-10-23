@@ -4,6 +4,12 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js'
 import { RGBELoader } from 'three/addons/loaders/RGBELoader.js'
 import { CSS3DRenderer, CSS3DObject } from 'three/addons/renderers/CSS3DRenderer.js'
 
+/* set audio*/
+
+var select = new Audio('assets/sfx/select.wav');
+
+/*set loader*/
+
 const progressBarContainer = document.querySelector('.progress-container');
 progressBarContainer.style.opacity = 1;
 
@@ -12,10 +18,6 @@ const progressBar = document.querySelector('.progress-bar');
 getComputedStyle(progressBar);
 
 const manager = new THREE.LoadingManager();
-
-/*manager.onStart = function ( url, itemsLoaded, itemsTotal ) {
-	console.log( 'Started loading file: ' + url + '.\nLoaded ' + itemsLoaded + ' of ' + itemsTotal + ' files.' );
-};*/
 
 manager.onLoad = function ( ) {
 	fadeBar();	
@@ -55,17 +57,25 @@ let teleparto = document.getElementById('teleparto');
 let telepartoArray = ["assets/images/03-teleparto/00.jpg","assets/images/03-teleparto/01.jpg","assets/images/03-teleparto/02.jpg","assets/images/03-teleparto/03.jpg",
 "assets/images/03-teleparto/04.jpg","assets/images/03-teleparto/05.jpg"]
 
+let characters = document.getElementById('characters');
+let charactersArray = ["assets/images/04-characters/Jere10.png", "assets/images/04-characters/Jere13.png", "assets/images/04-characters/Jere14.png", "assets/images/04-characters/Jere16.png",
+"assets/images/04-characters/Jere18.png","assets/images/04-characters/ququ02.png","assets/images/04-characters/ququ03.png"]
+
+let yo = document.getElementById('yo.mp4');
+
+let ququ = document.getElementById('ququ.mp4');
+
 let reel = document.getElementById('reel');
 
 let back = document.getElementById('back');
 
 let aboutMe = document.getElementById('about-me');
 
-var divs = [none, furniture, reel, back, connie01, connie02, televideo, vg, teleparto, aboutMe];
+var divs = [none, furniture, reel, back, connie01, connie02, televideo, vg, teleparto, aboutMe, characters, yo, ququ];
 
 /* preload images*/
 
-let images = [...furnitureArray, ...vgArray, ...telepartoArray]
+let images = [...furnitureArray, ...vgArray, ...telepartoArray, ...charactersArray];
 
 
 function preload_images() {
@@ -228,6 +238,9 @@ screenAM.colorSpace = THREE.SRGBColorSpace;
 const screenTeleparto = new THREE.TextureLoader().load( 'assets/screen/screen-teleparto.jpg' );
 screenTeleparto.colorSpace = THREE.SRGBColorSpace;
 
+const screenCharacters = new THREE.TextureLoader().load( 'assets/screen/screen-characters.jpg' );
+screenCharacters.colorSpace = THREE.SRGBColorSpace;
+
 const pantallaMAT = new THREE.MeshStandardMaterial({
 	color: 0x000000,
 	emissive: 0xffffff,
@@ -327,6 +340,10 @@ const onMouseMove = (event) => {
 				pantallaMAT.emissiveMap = screenAM;
 			break;
 
+			case 'm_cajonera_cajon_boton.001':
+				pantallaMAT.emissiveMap = screenCharacters;
+			break;
+
 			case 'm_botonMid.01':
 				back.style.display = 'block';
 			break;
@@ -354,7 +371,8 @@ const onMouseClick = (event) => {
 	
 	for (let i = 0; i < intersects.length; i++) {
 		if (intersects.length > 0 && intersects[i].object.name == 'estrella_boton'){
-		//console.log(intersects[i].object.userData.name);		
+		console.log(intersects[i].object.userData.name);
+		select.play();		
 		switch (intersects[i].object.userData.name) {
 			case 'm_botonR.002':
 				switchRight();
@@ -421,6 +439,14 @@ const onMouseClick = (event) => {
 				}
 			break;
 
+			case 'm_cajonera_cajon_boton.001':
+				if (!movingUP) {
+					movingUP = true;
+					currentDiv = characters;
+					updateDiv(characters);
+					cameratoScreen();
+				}
+			break;
 
 			case 'm_botonMid.01':
 				updateDiv(none);
@@ -430,7 +456,8 @@ const onMouseClick = (event) => {
 					pantallaMAT.emissiveMap = screenName;
 					cameratoDrawers();
 				}
-			break;
+			break;			
+
 		}		
 	} else{}
 }
@@ -448,7 +475,7 @@ function updateDiv(toDiv){
 	}
 }
 
-var furnitureNum = 0, visualsNum = 0, vgNum = 0, telepartoNum = 0;
+var furnitureNum = 0, visualsNum = 0, vgNum = 0, telepartoNum = 0, charactersNum = 0;
 
 function switchRight(){	
 
@@ -490,7 +517,7 @@ function switchRight(){
 	break;
 
 	case teleparto: 
-		if (telepartoNum >= 0 && telepartoNum <= 4) {
+		if (telepartoNum >= 0 && telepartoNum <= 5) {
 			telepartoNum = telepartoNum + 1;
 			teleparto.src=telepartoArray[telepartoNum];	
 			//console.log(telepartoNum);
@@ -498,6 +525,25 @@ function switchRight(){
 			telepartoNum = 0;
 			teleparto.src=telepartoArray[telepartoNum];		
 			//console.log(telepartoNum);	
+		}
+	break;
+
+	case characters: 
+		if (charactersNum >= 0 && charactersNum <= 5) {
+			charactersNum = charactersNum + 1;
+			characters.src=charactersArray[charactersNum];	
+		} else if (charactersNum == 6) {
+			updateDiv(yo);
+			yo.play();
+			charactersNum = charactersNum + 1;
+		} else if (charactersNum == 7) {
+			updateDiv(ququ);
+			ququ.play();
+			charactersNum = charactersNum + 1;
+		} else {
+			updateDiv(characters);
+			charactersNum = 0;
+			characters.src=charactersArray[charactersNum];		
 		}
 	break;
 
@@ -555,6 +601,22 @@ function switchLeft(){
 			teleparto.src=telepartoArray[telepartoNum];
 			//console.log(telepartoNum);
 	}
+	break;
+
+	case characters: 
+		if (charactersNum >= 1 && charactersNum <= 5) {
+			charactersNum = charactersNum - 1;
+			characters.src=charactersArray[charactersNum];	
+		} else if (charactersNum == 6) {
+			updateDiv(characters);
+			charactersNum = charactersNum - 1;
+		} else if (charactersNum == 7) {
+			updateDiv(yo);
+			charactersNum = charactersNum - 1;
+		} else {
+			updateDiv(ququ);
+			charactersNum = 7;
+		}
 	break;
 
 }
